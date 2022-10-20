@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storage
+  namespace: my-app
+spec:
+  selector:
+    matchLabels:
+      app: storage
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: storage
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+      - name: storage
+        image: ${storage_repository}:0.0.1
+        env:
+          - name: AWS_S3_BUCKET
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: AWS_S3_BUCKET
+          - name: AWS_REGION
+            value: eu-west-3
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: AWS_ACCESS_KEY_ID
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: AWS_SECRET_ACCESS_KEY
+          - name: STORAGE_PORT
+            value: "5000"
+          - name: DEBUG
+            value: storage
+        ports:
+        - containerPort: 5000

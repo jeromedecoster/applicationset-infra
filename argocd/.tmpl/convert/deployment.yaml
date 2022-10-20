@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: convert
+  namespace: my-app
+spec:
+  selector:
+    matchLabels:
+      app: convert
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: convert
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+      - name: convert
+        image: ${convert_repository}:0.0.1
+        env:
+          - name: CONVERT_PORT
+            value: "4000"
+          - name: DEBUG
+            value: convert
+        ports:
+        - containerPort: 4000

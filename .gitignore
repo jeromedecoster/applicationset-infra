@@ -1,0 +1,17 @@
+.ignore
+node_modules
+package-lock.json
+.env*
+*.pem
+*.pub
+.terraform*
+terraform.plan
+terraform.tfvars
+tfplan
+*.tfstate
+*.tfstate.*
+*.kate-swp*
+
+# /!\ important
+# argocd/argocd-docker.yml
+# argocd/argocd-ecr-public.yml

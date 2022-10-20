@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: convert
+  namespace: my-app
+  labels:
+    app: convert
+spec:
+  selector:
+    app: convert
+  ports:
+  - port: 4000
+    protocol: TCP  
+    targetPort: 4000

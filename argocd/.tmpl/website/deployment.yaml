@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website
+  namespace: my-app
+spec:
+  selector:
+    matchLabels:
+      app: website
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: website
+    spec:
+      containers:
+      - name: website
+        image: ${website_repository}:0.0.1
+        env:
+          - name: STORAGE_HOST
+            value: storage
+          - name: STORAGE_PORT
+            value: "5000"
+          - name: CONVERT_HOST
+            value: convert
+          - name: CONVERT_PORT
+            value: "4000"
+          - name: WEBSITE_PORT
+            value: "3000"
+          - name: DEBUG
+            value: website
+        ports:
+        - containerPort: 3000
+      imagePullSecrets:
+        - name: regcred

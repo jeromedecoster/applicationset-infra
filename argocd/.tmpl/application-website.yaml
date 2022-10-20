@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: website
+  namespace: argocd # /!\ important
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    # https://argocd-image-updater.readthedocs.io/en/stable/configuration/images/#available-annotations
+    argocd-image-updater.argoproj.io/image-list: website=${website_repository}
+    argocd-image-updater.argoproj.io/website.pull-secret: secret:argocd/aws-ecr-creds#creds
+    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/git-creds
+spec:
+  project: default
+
+  source:
+    repoURL: ${github_repo_infra}
+    targetRevision: HEAD
+    path: argocd/website
+  destination: 
+    server: https://kubernetes.default.svc
+    namespace: default
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+
+    automated:
+      selfHeal: true
+      prune: true

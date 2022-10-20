@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: storage
+  namespace: my-app
+  labels:
+    app: storage
+spec:
+  selector:
+    app: storage
+  ports:
+  - port: 5000
+    protocol: TCP  
+    targetPort: 5000
